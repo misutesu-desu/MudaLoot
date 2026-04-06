@@ -1,0 +1,10 @@
+{
+    "token": "YOUR_DISCORD_TOKEN_HERE",
+    "target_channel_id": 1084616941215416461,
+    "kl_amount": "12000",
+    "settings": {
+        "min_cooldown": 30.5,
+        "max_cooldown": 31.8,
+        "human_jitter": true
+    }
+}
