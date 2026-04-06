@@ -13,7 +13,7 @@ init(autoreset=True)
 class Config:
     def __init__(self, path="config.json"):
         if not os.path.exists(path):
-            print(f"{Fore.RED}[ERROR] config.json not found! Rename config.json.example to config.json")
+            print(f"{Fore.RED}[ERROR] config.json not found!")
             sys.exit(1)
         with open(path, "r", encoding="utf-8") as f:
             self.data = json.load(f)
