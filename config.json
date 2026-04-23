@@ -1,10 +1,11 @@
 {
-    "token": "YOUR_DISCORD_TOKEN_HERE",
-    "target_channel_id": 1084616941215416462,
-    "kl_amount": "12000",
+    "token": "YOUR_TOKEN_HERE",
+    "target_channel_id": "CHANNEL_ID_HERE",
+    "kl_amount": "1000",
+    "scrap_target_id": "112223356559843328",
+    "scrap_amount": "500000000",
     "settings": {
-        "min_cooldown": 30.5,
-        "max_cooldown": 31.8,
-        "human_jitter": true
+        "min_cooldown": 2.5,
+        "max_cooldown": 5.0
     }
 }
