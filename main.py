@@ -127,10 +127,14 @@ class LootBot(commands.Bot):
                 self.log("Mudae did not respond. Retrying next cycle.", "WARN")
 
             # --- PHASE 3: Randomized Cooldown Between Cycles ---
-            wait_time = random.uniform(
-                self.cfg.data["settings"]["min_cooldown"], 
-                self.cfg.data["settings"]["max_cooldown"]
-            )
+            # Defaults to 30-40 seconds if config settings are missing
+            try:
+                min_cd = self.cfg.data["settings"]["min_cooldown"]
+                max_cd = self.cfg.data["settings"]["max_cooldown"]
+            except KeyError:
+                min_cd, max_cd = 30.0, 40.0
+
+            wait_time = random.uniform(min_cd, max_cd)
             self.log(f"Cycle finished. Waiting {wait_time:.2f}s...", "INFO")
             await asyncio.sleep(wait_time)
 
@@ -140,24 +144,24 @@ class LootBot(commands.Bot):
 
         content = message.content.lower()
 
-        # Check for confirmation prompts (Both for KL and Scrap)
-        if "do you want to spend" in content or "do you really want to give" in content:
+        # Check for confirmation prompts (English & Spanish)
+        if any(prompt in content for prompt in ["do you want to spend", "do you really want to give", "quieres gastar", "¿quieres gastar", "de verdad quieres dar"]):
             if "y/n" in content or "yes/no" in content:
                 self.last_detected = "CONFIRM"
                 self.response_event.set()
         
-        # Success indicators
-        elif any(x in content for x in ["rolls stacked", "kakera", "obtained", "scraps have been given"]):
+        # Success indicators (English & Spanish)
+        elif any(success in content for success in ["rolls stacked", "kakera", "obtained", "scraps have been given", "obtenido", "conseguido", "se han dado"]):
             self.last_detected = "SUCCESS"
             self.response_event.set()
         
-        # Error indicators
-        elif "too many pins" in content or "release your duplicates" in content:
+        # Error indicators (English & Spanish)
+        elif any(error in content for error in ["too many pins", "release your duplicates", "tienes muchas insignias", "libera tus duplicados"]):
             self.last_detected = "PIN_ERROR"
             self.response_event.set()
         
-        # arlp check
-        elif "mudapins were released" in content:
+        # arlp check (English & Spanish)
+        elif any(arlp_msg in content for arlp_msg in ["mudapins were released", "fueron liberadas", "han sido liberadas", "fueron liberados"]):
             self.arlp_event.set()
 
 if __name__ == "__main__":
